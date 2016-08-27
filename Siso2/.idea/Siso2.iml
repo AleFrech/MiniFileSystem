@@ -2,14 +2,18 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/FileAttributes.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Block.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/BitMap.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Directory.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/FileAttributes.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Directory.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/BitMap.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/BitMap.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Block.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FileAttributes.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FileAttributes.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ParticionManager.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ParticionManager.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Directory.h" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

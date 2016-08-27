@@ -2,14 +2,15 @@
 // Created by alejandrofrech on 08-22-16.
 //
 
+#include <cstring>
 #include "BitMap.h"
 
 
 int BitMap::GetNextFreeSpace() {
-    for(int i=0;i<MapSize;i++){
-        if(Map->at(i)!=0) {
+    for(int i=0;i<Size;i++){
+        if(Buffer[i]!=0) {
             for(int n=8;n>=0;n--){
-                if(Map->at(i) & 1<<n){
+                if(Buffer[i] & 1<<n){
                     return n;
                 }
             }
@@ -18,40 +19,46 @@ int BitMap::GetNextFreeSpace() {
     return -1;
 }
 
-void BitMap::InitMap() {
-    for(int i=0;i<MapSize;i++){
+void BitMap::InitMap(int size) {
+    Size=(size/4096) /8;
+    for(int i=0;i<Size;i++){
         if(i==0)
-            Map->push_back(63);
+            Buffer[i]=31;
         else
-            Map->push_back(255);
+            Buffer[i]=255;
     }
 }
 
 unsigned char BitMap::SetOccupiedToFree(unsigned char value, int pos) {
     int CharPositionInMap=GetCharPosition(value);
 
-    unsigned char tmpChar=Map->at(CharPositionInMap);
-    Map->at(CharPositionInMap)=(tmpChar |= 1 << pos);
-    return Map->at(CharPositionInMap);
+    unsigned char tmpChar=Buffer[CharPositionInMap];
+    Buffer[CharPositionInMap]=(tmpChar |= 1 << pos);
+    return Buffer[CharPositionInMap];
 }
 
 unsigned char BitMap::SetFreeToOcuppied(unsigned char value, int pos){
     int CharPositionInMap=GetCharPosition(value);
 
-    unsigned char tmpChar=Map->at(CharPositionInMap);
-    Map->at(CharPositionInMap)=(tmpChar &= ~(1<<pos));
-    return Map->at(CharPositionInMap);
+    unsigned char tmpChar=Buffer[CharPositionInMap];
+    Buffer[CharPositionInMap]=(tmpChar &= ~(1<<pos));
+    return Buffer[CharPositionInMap];
 }
 
 int BitMap::GetCharPosition(unsigned char value) {
-    for(int i=0;i<MapSize;i++){
-        if(Map->at(i)==value){
+    for(int i=0;i<Size;i++){
+        if(Buffer[i]==value){
             return i;
         }
     }
     return -1;
 }
 
+
+
 BitMap::BitMap() {
-    Map= new vector<unsigned char>;
+}
+
+unsigned char BitMap::Get(int pos) {
+    return Buffer[pos];
 }

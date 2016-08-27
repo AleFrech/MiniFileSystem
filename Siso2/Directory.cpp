@@ -5,5 +5,4 @@
 #include "Directory.h"
 
 Directory::Directory() {
-    DirectoryEntries = new vector<FileAttributes>;
 }

@@ -7,18 +7,22 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include "Block.h"
+
 using namespace std;
-class BitMap {
+class BitMap{
 public:
-    vector<unsigned char> *Map;
+    int Size;
+    unsigned char Buffer[4092];
     BitMap();
     unsigned char SetOccupiedToFree(unsigned char value,int pos);
     unsigned char SetFreeToOcuppied(unsigned char value,int pos);
+    unsigned char Get(int pos);
     int GetNextFreeSpace();
     int GetCharPosition(unsigned char value);
-    void InitMap();
+    void InitMap(int size);
 private:
-    int MapSize=128;
+
 };
 
 

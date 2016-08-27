@@ -10,15 +10,15 @@
 #include <sstream>
 #include <fstream>
 #include "FileAttributes.h"
+#include "Block.h"
+
 using namespace std;
 
 
-class Directory {
+class Directory :Block {
 public:
     Directory();
-    vector<FileAttributes>*DirectoryEntries;
-private:
-    int DirectorySize=4096;
+    FileAttributes DirectoryEntries[128];
 };
 
 
