@@ -16,11 +16,13 @@ private:
     Directory * directory;
 public:
     ParticionManager();
+    string particionName;
     int ParticionSize;
     void CreateParticion();
     ParticionManager* LoadParticion();
     void CreateFile(string name, int size);
-
+    void CreateEmptyFile();
+    void ListFiles();
 private:
     Block  ReadBlock(string name, int position);
     BitMap ReadBitMap(string name);

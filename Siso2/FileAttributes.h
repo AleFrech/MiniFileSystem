@@ -6,12 +6,14 @@
 #define SISO2_FILEATTRIBUTES_H
 
 
+#include <ctime>
+
 class FileAttributes {
 public:
-    char FileName[8];
+    char FileName[12];
     double FileSize;
-    double Date;
-    int* FirstBlockPointer;
+    time_t Date;
+    int FirstBlockPointer;
 
 };
 

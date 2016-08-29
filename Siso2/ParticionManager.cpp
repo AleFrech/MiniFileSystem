@@ -12,8 +12,7 @@ ParticionManager::ParticionManager() {
 void ParticionManager::CreateParticion() {
 
     cout << "Ingresar Nombre de la Particion\n" << endl;
-    string partitionName="";
-    cin>>partitionName;
+    cin>>particionName;
     cout << "Ingresar Tamano de la Particion GB o MB\n" << endl;
     string particion="";
     string sizeFilter="";
@@ -26,41 +25,45 @@ void ParticionManager::CreateParticion() {
         ParticionSize=size*1024*1024*1024;
     else
         ParticionSize=size*1024*1024;
-    CreateFile(partitionName,ParticionSize);
-    WriteSize(partitionName,ParticionSize);
+    CreateFile(particionName,ParticionSize);
+    WriteSize(particionName,ParticionSize);
     bitMap = new BitMap();
     bitMap->InitMap(ParticionSize);
-    WriteBitMap(partitionName,bitMap);
+    WriteBitMap(particionName,bitMap);
     directory = new Directory();
-    FileAttributes fileattr;
-    fileattr.Date=1994;
-    strcpy(fileattr.FileName,string("paco.txt").c_str());
-    fileattr.FileSize=14;
-    fileattr.FirstBlockPointer=NULL;
-    directory->DirectoryEntries[0]= fileattr;
-    WriteDirectory(partitionName,directory);
+    WriteDirectory(particionName,directory);
 }
 
 
 ParticionManager* ParticionManager::LoadParticion() {
-    string name;
-    cout<<"Ingrese nombre de la Particion a cargar"<<endl;
-    cin>>name;
     auto tmpPartition=new ParticionManager;
-    tmpPartition->ParticionSize=ReadSize(name);
+    cout<<"Ingrese nombre de la Particion a cargar"<<endl;
+    cin>>tmpPartition->particionName;
+    tmpPartition->ParticionSize=ReadSize(tmpPartition->particionName);
     cout<<tmpPartition->ParticionSize<<endl;
-    tmpPartition->bitMap=new BitMap(ReadBitMap(name));
+    tmpPartition->bitMap=new BitMap(ReadBitMap(tmpPartition->particionName));
     if(tmpPartition->bitMap->Get(0)==31){
         cout<<"Successfully Loaded BitMap\n";
     }
-    tmpPartition->directory= new Directory(ReadDirectory(name));
-    cout<<tmpPartition->directory->DirectoryEntries[0].FileName<<endl;
-    cout<<tmpPartition->directory->DirectoryEntries[0].FileSize<<endl;
-    cout<<tmpPartition->directory->DirectoryEntries[0].Date<<endl;
-    if(tmpPartition->directory->DirectoryEntries[0].FirstBlockPointer==NULL)
-        cout<<"solo falta el pointer papa"<<endl;
+    tmpPartition->directory= new Directory(ReadDirectory(tmpPartition->particionName));
+        cout<<"Successfully Loaded Directory\n";
     return tmpPartition;
 }
+
+void ParticionManager::CreateEmptyFile() {
+    string Filename;
+    cout<<"Ingrese nombre del archivo a crear"<<endl;
+    cin>> Filename;
+    FileAttributes fileattr;
+    fileattr.Date=1994;
+    strcpy(fileattr.FileName,string(Filename).c_str());
+    fileattr.FileSize=0.0;
+    fileattr.Date=time(0);
+    fileattr.FirstBlockPointer=0;
+    directory->Add(fileattr);
+    WriteDirectory(particionName,directory);
+}
+
 
 void ParticionManager::WriteDirectory(string partitionName, Directory *directory) {
     Write(partitionName,reinterpret_cast<char*>( directory ),sizeof(Directory),4096*2);
@@ -129,5 +132,10 @@ void ParticionManager::Write(string name,char *buffer, int size,int pos) {
     file.write(buffer,size);
     file.close();
 }
+
+void ParticionManager::ListFiles() {
+    directory->ListFiles();
+}
+
 
 

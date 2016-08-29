@@ -52,6 +52,10 @@ int main() {
             currentParticion->CreateParticion();
         }else if(strcmp("Load",command)) {
             currentParticion = currentParticion->LoadParticion();
+        }else if(strcmp("CreateEmpty",command)) {
+            currentParticion->CreateEmptyFile();
+        }else if(strcmp("ls",command)) {
+            currentParticion->ListFiles();
         }else{
             cout<<"Command not found\n";
         }

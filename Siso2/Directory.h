@@ -18,7 +18,10 @@ using namespace std;
 class Directory {
 public:
     Directory();
-    FileAttributes DirectoryEntries[128];
+    FileAttributes DirectoryEntries[127];
+    void Add(FileAttributes entry);
+    int occupied;
+    void ListFiles();
 };
 
 
