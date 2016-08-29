@@ -7,21 +7,26 @@
 
 
 #include "BitMap.h"
+#include "Directory.h"
 #include <string>
 
 class ParticionManager {
 private:
     BitMap *bitMap;
+    Directory * directory;
 public:
     ParticionManager();
     int ParticionSize;
     void CreateParticion();
-    void LoadParticion(string name);
-private:
+    ParticionManager* LoadParticion();
     void CreateFile(string name, int size);
-    Block * ReadBlock(string name, int position);
-    BitMap* ReadBitMap(string name);
+
+private:
+    Block  ReadBlock(string name, int position);
+    BitMap ReadBitMap(string name);
+    Directory  ReadDirectory(string name);
     int ReadSize(string name);
+    void WriteDirectory(string partitionName,Directory * directory);
     void WriteBlock(string partitionName,Block * block,int position);
     void WriteSize(string partitionName,int size);
     void WriteBitMap(string partitionName, BitMap *bitmap);

@@ -15,7 +15,7 @@
 using namespace std;
 
 
-class Directory :Block {
+class Directory {
 public:
     Directory();
     FileAttributes DirectoryEntries[128];

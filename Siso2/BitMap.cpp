@@ -20,7 +20,10 @@ int BitMap::GetNextFreeSpace() {
 }
 
 void BitMap::InitMap(int size) {
-    Size=(size/4096) /8;
+    Size=(size/1024/4)/8;
+    if(Size>4092)
+        Size=4092;
+
     for(int i=0;i<Size;i++){
         if(i==0)
             Buffer[i]=31;
@@ -57,8 +60,10 @@ int BitMap::GetCharPosition(unsigned char value) {
 
 
 BitMap::BitMap() {
+    Size=0;
 }
 
 unsigned char BitMap::Get(int pos) {
     return Buffer[pos];
 }
+
