@@ -8,20 +8,21 @@
 
 #include "BitMap.h"
 #include "Directory.h"
+#include "FileManager.h"
 #include <string>
 
 class ParticionManager {
 private:
     BitMap *bitMap;
     Directory * directory;
+    FileManager * fileManager;
 public:
     ParticionManager();
     string particionName;
     int ParticionSize;
-    void CreateParticion();
-    ParticionManager* LoadParticion();
-    void CreateFile(string name, int size);
-    void CreateEmptyFile();
+    void CreateParticion(char* name,char* size);
+    ParticionManager* LoadParticion(char * name);
+    void CreateEmptyFile(char* name);
     void ListFiles();
 private:
     Block  ReadBlock(string name, int position);
@@ -32,8 +33,7 @@ private:
     void WriteBlock(string partitionName,Block * block,int position);
     void WriteSize(string partitionName,int size);
     void WriteBitMap(string partitionName, BitMap *bitmap);
-    void Read(string name,char *buffer, int size,int pos);
-    void Write(string name,char *buffer, int size,int pos);
+
 
 };
 

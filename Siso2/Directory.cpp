@@ -4,9 +4,6 @@
 
 #include "Directory.h"
 
-Directory::Directory() {
-    occupied=0;
-}
 
 void Directory::Add(FileAttributes entry) {
    DirectoryEntries[occupied]=entry;
@@ -22,4 +19,8 @@ void Directory::ListFiles() {
         cout<<" Date: ";
         cout<< ctime(&DirectoryEntries[i].Date)<<endl;
     }
+}
+
+Directory::Directory() {
+ occupied=0;
 }

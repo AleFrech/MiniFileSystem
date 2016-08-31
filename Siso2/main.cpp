@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include "ParticionManager.h"
 
 using namespace std;
@@ -43,18 +44,22 @@ int main() {
     ParticionManager *currentParticion = new ParticionManager();
     while (1) {
 
-        char buffer[30];
+        char buffer[100];
         cout<<("cmd:>");
-        cin>>buffer;
+        cin.getline(buffer,sizeof(buffer));
         char command[30];
         int offset = splitBufferCommand(buffer,command);
-        if(strcmp("Create",command)){
-            currentParticion->CreateParticion();
-        }else if(strcmp("Load",command)) {
-            currentParticion = currentParticion->LoadParticion();
-        }else if(strcmp("CreateEmpty",command)) {
-            currentParticion->CreateEmptyFile();
-        }else if(strcmp("ls",command)) {
+        if(strcmp((char *) "Create", command)){
+            char *name= strtok((buffer+offset)," ");
+            char *size = strtok(NULL," ");
+            currentParticion->CreateParticion(name,size);
+        }else if(strcmp((char *) "Load", command)) {
+            currentParticion = currentParticion->LoadParticion(buffer+offset);
+        }else if(strcmp((char *) "Unmount", command)) {
+            currentParticion = NULL;
+        }else if(strcmp((char *) "CreateEmpty", command)) {
+            currentParticion->CreateEmptyFile(buffer+offset);
+        }else if(strcmp((char *) "ls", command)) {
             currentParticion->ListFiles();
         }else{
             cout<<"Command not found\n";

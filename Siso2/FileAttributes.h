@@ -7,6 +7,8 @@
 
 
 #include <ctime>
+#include "BitMap.h"
+#include <string>
 
 class FileAttributes {
 public:

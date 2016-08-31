@@ -4,28 +4,21 @@
 
 #include <cstring>
 #include "ParticionManager.h"
-#include<string>
 
 ParticionManager::ParticionManager() {
+    fileManager= new FileManager();
 }
 
-void ParticionManager::CreateParticion() {
-
-    cout << "Ingresar Nombre de la Particion\n" << endl;
-    cin>>particionName;
-    cout << "Ingresar Tamano de la Particion GB o MB\n" << endl;
-    string particion="";
-    string sizeFilter="";
-    cin>>particion;
-    cin>>sizeFilter;
-
-    int size=stoi(particion);
+void ParticionManager::CreateParticion(char * name,char* partitionSize) {
+    particionName=string(name);
+    int size=stoi(strtok(partitionSize," "));
     int ParticionSize=0;
-    if(sizeFilter=="GB")
+    char * filterSize=strtok(NULL," ");
+    if(filterSize=="GB")
         ParticionSize=size*1024*1024*1024;
     else
         ParticionSize=size*1024*1024;
-    CreateFile(particionName,ParticionSize);
+    fileManager->CreateFile(particionName,ParticionSize);
     WriteSize(particionName,ParticionSize);
     bitMap = new BitMap();
     bitMap->InitMap(ParticionSize);
@@ -35,10 +28,9 @@ void ParticionManager::CreateParticion() {
 }
 
 
-ParticionManager* ParticionManager::LoadParticion() {
+ParticionManager* ParticionManager::LoadParticion(char * name) {
     auto tmpPartition=new ParticionManager;
-    cout<<"Ingrese nombre de la Particion a cargar"<<endl;
-    cin>>tmpPartition->particionName;
+    tmpPartition->particionName=string(name);
     tmpPartition->ParticionSize=ReadSize(tmpPartition->particionName);
     cout<<tmpPartition->ParticionSize<<endl;
     tmpPartition->bitMap=new BitMap(ReadBitMap(tmpPartition->particionName));
@@ -50,13 +42,9 @@ ParticionManager* ParticionManager::LoadParticion() {
     return tmpPartition;
 }
 
-void ParticionManager::CreateEmptyFile() {
-    string Filename;
-    cout<<"Ingrese nombre del archivo a crear"<<endl;
-    cin>> Filename;
+void ParticionManager::CreateEmptyFile(char * name) {
     FileAttributes fileattr;
-    fileattr.Date=1994;
-    strcpy(fileattr.FileName,string(Filename).c_str());
+    strcpy(fileattr.FileName,string(name).c_str());
     fileattr.FileSize=0.0;
     fileattr.Date=time(0);
     fileattr.FirstBlockPointer=0;
@@ -66,71 +54,46 @@ void ParticionManager::CreateEmptyFile() {
 
 
 void ParticionManager::WriteDirectory(string partitionName, Directory *directory) {
-    Write(partitionName,reinterpret_cast<char*>( directory ),sizeof(Directory),4096*2);
+    fileManager->Write(partitionName,reinterpret_cast<char*>( directory ),sizeof(Directory),4096*2);
 }
 
 void ParticionManager::WriteBlock(string partitionName, Block *block, int position) {
-    Write(partitionName,reinterpret_cast<char*>( block ),sizeof(Block),position);
+    fileManager->Write(partitionName,reinterpret_cast<char*>( block ),sizeof(Block),position);
 }
 
 void ParticionManager::WriteSize(string partitionName,int size) {
-    Write(partitionName,reinterpret_cast<char*>( &size ),sizeof(size),0);
+    fileManager->Write(partitionName,reinterpret_cast<char*>( &size ),sizeof(size),0);
 }
 
 void ParticionManager::WriteBitMap(string partitionName, BitMap *bitmap) {
-    Write(partitionName,reinterpret_cast<char*>( bitmap ),sizeof(BitMap),4096);
+    fileManager->Write(partitionName,reinterpret_cast<char*>( bitmap ),sizeof(BitMap),4096);
 }
 
 int ParticionManager::ReadSize(string name) {
     int size;
-    Read(name,reinterpret_cast<char*>( &size), sizeof(size),0);
+    fileManager->Read(name,reinterpret_cast<char*>( &size), sizeof(size),0);
     return size;
 }
 
 
 Directory ParticionManager::ReadDirectory(string name) {
     Directory directory;
-    Read(name,reinterpret_cast<char*>(&directory), sizeof(directory),4096*2);
+    fileManager->Read(name,reinterpret_cast<char*>(&directory), sizeof(directory),4096*2);
     return directory;
 }
 
 
 BitMap ParticionManager::ReadBitMap(string name) {
     BitMap bitmap;
-    Read(name,reinterpret_cast<char*>(&bitmap), sizeof(BitMap),4096);
+    fileManager->Read(name,reinterpret_cast<char*>(&bitmap), sizeof(BitMap),4096);
     return bitmap;
 }
 
 
 Block ParticionManager::ReadBlock(string name, int position) {
     Block block;
-    Read(name,reinterpret_cast<char*>(&block), sizeof(Block),position);
+    fileManager->Read(name,reinterpret_cast<char*>(&block), sizeof(Block),position);
     return block;
-}
-
-void ParticionManager::CreateFile(string name, int size) {
-    ofstream file;
-    file.open(name,ios::binary |ios::out);
-    file.seekp(size - 1);
-    file.write(" ", 1);
-    file.close();
-}
-
-
-void ParticionManager::Read(string name,char *buffer, int size,int pos) {
-    fstream file;
-    file.open(name,ios::binary |ios::out|ios::in);
-    file.seekg(pos);
-    file.read(buffer,size);
-    file.close();
-}
-
-void ParticionManager::Write(string name,char *buffer, int size,int pos) {
-    fstream file;
-    file.open(name,ios::binary |ios::out|ios::in);
-    file.seekg(pos);
-    file.write(buffer,size);
-    file.close();
 }
 
 void ParticionManager::ListFiles() {
