@@ -52,6 +52,16 @@ void ParticionManager::CreateEmptyFile(char * name) {
     WriteDirectory(particionName,directory);
 }
 
+void ParticionManager::RenameFile(char *name, char *newName) {
+    directory->RenameFile(name,newName);
+    WriteDirectory(particionName,directory);
+}
+
+void ParticionManager::DeleteFile(char *name) {
+    directory->DeleteEntry(name);
+    WriteDirectory(particionName,directory);
+}
+
 
 void ParticionManager::WriteDirectory(string partitionName, Directory *directory) {
     fileManager->Write(partitionName,reinterpret_cast<char*>( directory ),sizeof(Directory),4096*2);
@@ -99,6 +109,8 @@ Block ParticionManager::ReadBlock(string name, int position) {
 void ParticionManager::ListFiles() {
     directory->ListFiles();
 }
+
+
 
 
 

@@ -21,6 +21,8 @@ public:
     string particionName;
     int ParticionSize;
     void CreateParticion(char* name,char* size);
+    void RenameFile(char* name,char * newName);
+    void DeleteFile(char * name);
     ParticionManager* LoadParticion(char * name);
     void CreateEmptyFile(char* name);
     void ListFiles();

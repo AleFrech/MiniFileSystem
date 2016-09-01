@@ -61,6 +61,12 @@ int main() {
             currentParticion->CreateEmptyFile(buffer+offset);
         }else if(strcmp((char *) "ls", command)) {
             currentParticion->ListFiles();
+        }else if(strcmp((char *) "Rename", command)){
+            char *name= strtok((buffer+offset)," ");
+            char *newName = strtok(NULL," ");
+            currentParticion->RenameFile(name,newName);
+        }else if(strcmp((char *) "Delete", command)) {
+            currentParticion->DeleteFile(buffer+offset);
         }else{
             cout<<"Command not found\n";
         }

@@ -20,6 +20,8 @@ public:
     Directory();
     FileAttributes DirectoryEntries[127];
     void Add(FileAttributes entry);
+    void RenameFile(char * name,char * newName);
+    void DeleteEntry(char * name);
     int occupied;
     void ListFiles();
 };
