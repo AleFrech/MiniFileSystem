@@ -15,8 +15,8 @@ public:
     int Size;
     unsigned char Buffer[4092];
     BitMap();
-    unsigned char SetOccupiedToFree(unsigned char value,int pos);
-    unsigned char SetFreeToOcuppied(unsigned char value,int pos);
+    unsigned char SetOccupiedToFree(unsigned char value,int bitPos);
+    unsigned char SetFreeToOcuppied(unsigned char value,int bitPos);
     unsigned char Get(int pos);
     int GetNextFreeSpace();
     int GetCharPosition(unsigned char value);

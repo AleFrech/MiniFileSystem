@@ -9,9 +9,11 @@
 int BitMap::GetNextFreeSpace() {
     for(int i=0;i<Size;i++){
         if(Buffer[i]!=0) {
-            for(int n=8;n>=0;n--){
+            for(int n=7;n>=0;n--){
                 if(Buffer[i] & 1<<n){
-                    return n;
+                    SetFreeToOcuppied(Buffer[i],n);
+                    // pos=(numero de bits por palabra) x (palabras con valor 0) + (posición del primer bit en 1).
+                    return (8*i)+n;
                 }
             }
         }
@@ -24,27 +26,25 @@ void BitMap::InitMap(int size) {
     if(Size>4092)
         Size=4092;
 
-    for(int i=0;i<Size;i++){
-        if(i==0)
-            Buffer[i]=31;
+    for(int i=0;i<Size;i++) {
+        if (i == 0)
+            Buffer[i] = 31;
         else
-            Buffer[i]=255;
+            Buffer[i] = 255;
     }
 }
 
-unsigned char BitMap::SetOccupiedToFree(unsigned char value, int pos) {
+unsigned char BitMap::SetOccupiedToFree(unsigned char value, int bitPos) {
     int CharPositionInMap=GetCharPosition(value);
-
     unsigned char tmpChar=Buffer[CharPositionInMap];
-    Buffer[CharPositionInMap]=(tmpChar |= 1 << pos);
+    Buffer[CharPositionInMap]=(tmpChar |= 1 << bitPos);
     return Buffer[CharPositionInMap];
 }
 
-unsigned char BitMap::SetFreeToOcuppied(unsigned char value, int pos){
+unsigned char BitMap::SetFreeToOcuppied(unsigned char value, int bitPos){
     int CharPositionInMap=GetCharPosition(value);
-
     unsigned char tmpChar=Buffer[CharPositionInMap];
-    Buffer[CharPositionInMap]=(tmpChar &= ~(1<<pos));
+    Buffer[CharPositionInMap]=(tmpChar &= ~(1<<bitPos));
     return Buffer[CharPositionInMap];
 }
 
@@ -56,8 +56,6 @@ int BitMap::GetCharPosition(unsigned char value) {
     }
     return -1;
 }
-
-
 
 BitMap::BitMap() {
     Size=0;

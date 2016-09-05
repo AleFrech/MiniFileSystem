@@ -110,6 +110,10 @@ void ParticionManager::ListFiles() {
     directory->ListFiles();
 }
 
+void ParticionManager::Delete(char *name) {
+    fileManager->DeleteFile(name);
+}
+
 
 
 

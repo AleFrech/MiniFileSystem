@@ -29,3 +29,7 @@ void FileManager::Write(string name,char *buffer, int size,int pos) {
     file.write(buffer,size);
     file.close();
 }
+
+void FileManager::DeleteFile(string name) {
+    remove(name.c_str());
+}

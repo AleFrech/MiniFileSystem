@@ -36,10 +36,6 @@ int splitBufferCommand(char* buffer,char * command){
     return offset;
 }
 
-
-
-
-
 int main() {
     ParticionManager *currentParticion = new ParticionManager();
     while (1) {
@@ -65,8 +61,10 @@ int main() {
             char *name= strtok((buffer+offset)," ");
             char *newName = strtok(NULL," ");
             currentParticion->RenameFile(name,newName);
-        }else if(strcmp((char *) "Delete", command)) {
+        }else if(strcmp((char *) "DeleteFile", command)) {
             currentParticion->DeleteFile(buffer+offset);
+        }else if(strcmp((char *) "Delete", command)) {
+            currentParticion->Delete(buffer+offset);
         }else{
             cout<<"Command not found\n";
         }

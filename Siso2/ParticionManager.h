@@ -23,6 +23,7 @@ public:
     void CreateParticion(char* name,char* size);
     void RenameFile(char* name,char * newName);
     void DeleteFile(char * name);
+    void Delete(char * name);
     ParticionManager* LoadParticion(char * name);
     void CreateEmptyFile(char* name);
     void ListFiles();

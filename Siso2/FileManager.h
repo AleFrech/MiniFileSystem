@@ -10,6 +10,7 @@
 class FileManager {
 public:
     void CreateFile(string name, int size);
+    void DeleteFile(string name);
     void Read(string name,char *buffer, int size,int pos);
     void Write(string name,char *buffer, int size,int pos);
 
