@@ -8,8 +8,9 @@
 
 class Block {
 public:
-    unsigned char Buffer[4088];
-    int * nextBlock;
+    char Buffer[4088];
+    int positon;
+    int  nextBlock;
 };
 
 

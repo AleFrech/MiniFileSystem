@@ -61,10 +61,15 @@ int main() {
             char *name= strtok((buffer+offset)," ");
             char *newName = strtok(NULL," ");
             currentParticion->RenameFile(name,newName);
+        }else if(strcmp((char *) "Copy", command)){
+            char *filepath= strtok((buffer+offset)," ");
+            currentParticion->CopyFile(filepath);
         }else if(strcmp((char *) "DeleteFile", command)) {
             currentParticion->DeleteFile(buffer+offset);
         }else if(strcmp((char *) "Delete", command)) {
             currentParticion->Delete(buffer+offset);
+        }else if(strcmp((char *) "Read", command)) {
+            currentParticion->Read();
         }else{
             cout<<"Command not found\n";
         }

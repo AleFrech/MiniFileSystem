@@ -20,6 +20,7 @@ public:
     ParticionManager();
     string particionName;
     int ParticionSize;
+    void Read();
     void CreateParticion(char* name,char* size);
     void RenameFile(char* name,char * newName);
     void DeleteFile(char * name);
@@ -27,6 +28,7 @@ public:
     ParticionManager* LoadParticion(char * name);
     void CreateEmptyFile(char* name);
     void ListFiles();
+    void CopyFile(char * filepath);
 private:
     Block  ReadBlock(string name, int position);
     BitMap ReadBitMap(string name);
@@ -36,6 +38,7 @@ private:
     void WriteBlock(string partitionName,Block * block,int position);
     void WriteSize(string partitionName,int size);
     void WriteBitMap(string partitionName, BitMap *bitmap);
+    void WriteFiletoDirectoryEntry(string filepath);
 
 
 };

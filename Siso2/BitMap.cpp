@@ -65,3 +65,9 @@ unsigned char BitMap::Get(int pos) {
     return Buffer[pos];
 }
 
+void BitMap::FreeBlock(int positionBlock) {
+    auto tmpchar = Get(positionBlock/8);
+    auto bitpos = positionBlock%8;
+    SetOccupiedToFree(tmpchar,bitpos);
+}
+

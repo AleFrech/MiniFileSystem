@@ -13,7 +13,8 @@ public:
     void DeleteFile(string name);
     void Read(string name,char *buffer, int size,int pos);
     void Write(string name,char *buffer, int size,int pos);
-
+    string GetFileNameFromPath(string path);
+    int GetFileSize(string name);
 };
 
 

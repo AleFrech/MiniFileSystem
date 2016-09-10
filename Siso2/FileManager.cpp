@@ -33,3 +33,24 @@ void FileManager::Write(string name,char *buffer, int size,int pos) {
 void FileManager::DeleteFile(string name) {
     remove(name.c_str());
 }
+
+string FileManager::GetFileNameFromPath(string path) {
+        char sep = '/';
+#ifdef _WIN32
+        sep = '\\';
+#endif
+        size_t i = path.rfind(sep, path.length());
+        if (i != string::npos) {
+            return(path.substr(i+1, path.length() - i));
+        }
+        return("");
+}
+
+int FileManager::GetFileSize(string name) {
+    ifstream file;
+    file.open(name,ios::binary |ios::out|ios::in);
+    std::streampos fsize = file.tellg();
+    file.seekg( 0, std::ios::end );
+    fsize = file.tellg() - fsize;
+    return (int)fsize;
+}

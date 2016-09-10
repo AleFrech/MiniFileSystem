@@ -34,9 +34,7 @@ ParticionManager* ParticionManager::LoadParticion(char * name) {
     tmpPartition->ParticionSize=ReadSize(tmpPartition->particionName);
     cout<<tmpPartition->ParticionSize<<endl;
     tmpPartition->bitMap=new BitMap(ReadBitMap(tmpPartition->particionName));
-    if(tmpPartition->bitMap->Get(0)==31){
         cout<<"Successfully Loaded BitMap\n";
-    }
     tmpPartition->directory= new Directory(ReadDirectory(tmpPartition->particionName));
         cout<<"Successfully Loaded Directory\n";
     return tmpPartition;
@@ -112,6 +110,68 @@ void ParticionManager::ListFiles() {
 
 void ParticionManager::Delete(char *name) {
     fileManager->DeleteFile(name);
+}
+
+void ParticionManager::WriteFiletoDirectoryEntry(string filepath) {
+    FileAttributes fileattr;
+    int size=fileManager->GetFileSize(filepath);
+    strcpy(fileattr.FileName,string(fileManager->GetFileNameFromPath(filepath)).c_str());
+    fileattr.FileSize=size;
+    fileattr.Date=time(0);
+    int firstblockpointer=bitMap->GetNextFreeSpace();
+    fileattr.FirstBlockPointer=firstblockpointer;
+
+    fstream file;
+    file.open(filepath,ios::binary |ios::out|ios::in);
+    int offset=0;
+    file.seekg(offset);
+    bool firstIteration=true;
+    while(size>4088){
+        Block* block= new Block();
+        int blockpos;
+        if(firstIteration){
+            blockpos=firstblockpointer;
+            firstIteration=false;
+        }else
+            blockpos=bitMap->GetNextFreeSpace();
+        block->positon=blockpos;
+        block->nextBlock=blockpos+1;
+        fileManager->Read(filepath,block->Buffer,4088,offset);
+        WriteBlock(particionName,block,blockpos*4096);
+        size-=4088;
+        offset+=4088;
+        file.seekg(offset);
+     }
+    if(size!=0){
+        Block* block= new Block();
+        int blockpos;
+        if(firstIteration){
+            blockpos=firstblockpointer;
+            firstIteration=false;
+        }else
+            blockpos=bitMap->GetNextFreeSpace();
+        block->positon=blockpos;
+        block->nextBlock=-1;
+        fileManager->Read(filepath,block->Buffer,size,offset);
+        WriteBlock(particionName,block,blockpos*4096);
+        offset+=size;
+        file.seekg(offset);
+    }
+    directory->Add(fileattr);
+    WriteDirectory(particionName,directory);
+    WriteBitMap(particionName,bitMap);
+}
+
+void ParticionManager::CopyFile(char *filepath) {
+    WriteFiletoDirectoryEntry(string(filepath));
+}
+
+void ParticionManager::Read() {
+//    Block  block= ReadBlock("prueba.bd",5*4096);
+    bitMap->GetNextFreeSpace();
+    bitMap->GetNextFreeSpace();
+    auto mierda=bitMap->GetNextFreeSpace();
+    cout<<mierda;
 }
 
 

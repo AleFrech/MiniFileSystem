@@ -15,13 +15,15 @@ public:
     int Size;
     unsigned char Buffer[4092];
     BitMap();
-    unsigned char SetOccupiedToFree(unsigned char value,int bitPos);
-    unsigned char SetFreeToOcuppied(unsigned char value,int bitPos);
+
     unsigned char Get(int pos);
     int GetNextFreeSpace();
+    void FreeBlock(int positionBlock);
     int GetCharPosition(unsigned char value);
     void InitMap(int size);
 private:
+    unsigned char SetOccupiedToFree(unsigned char value,int bitPos);
+    unsigned char SetFreeToOcuppied(unsigned char value,int bitPos);
 
 };
 
