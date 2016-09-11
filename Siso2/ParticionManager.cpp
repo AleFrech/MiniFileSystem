@@ -112,17 +112,17 @@ void ParticionManager::Delete(char *name) {
     fileManager->DeleteFile(name);
 }
 
-void ParticionManager::WriteFiletoDirectoryEntry(string filepath) {
+void ParticionManager::ImportFile(string filePath) {
     FileAttributes fileattr;
-    int size=fileManager->GetFileSize(filepath);
-    strcpy(fileattr.FileName,string(fileManager->GetFileNameFromPath(filepath)).c_str());
+    int size=fileManager->GetFileSize(filePath);
+    strcpy(fileattr.FileName,string(fileManager->GetFileNameFromPath(filePath)).c_str());
     fileattr.FileSize=size;
     fileattr.Date=time(0);
     int firstblockpointer=bitMap->GetNextFreeSpace();
     fileattr.FirstBlockPointer=firstblockpointer;
 
     fstream file;
-    file.open(filepath,ios::binary |ios::out|ios::in);
+    file.open(filePath,ios::binary |ios::out|ios::in);
     int offset=0;
     file.seekg(offset);
     bool firstIteration=true;
@@ -136,7 +136,7 @@ void ParticionManager::WriteFiletoDirectoryEntry(string filepath) {
             blockpos=bitMap->GetNextFreeSpace();
         block->positon=blockpos;
         block->nextBlock=blockpos+1;
-        fileManager->Read(filepath,block->Buffer,4088,offset);
+        fileManager->Read(filePath,block->Buffer,4088,offset);
         WriteBlock(particionName,block,blockpos*4096);
         size-=4088;
         offset+=4088;
@@ -152,7 +152,7 @@ void ParticionManager::WriteFiletoDirectoryEntry(string filepath) {
             blockpos=bitMap->GetNextFreeSpace();
         block->positon=blockpos;
         block->nextBlock=-1;
-        fileManager->Read(filepath,block->Buffer,size,offset);
+        fileManager->Read(filePath,block->Buffer,size,offset);
         WriteBlock(particionName,block,blockpos*4096);
         offset+=size;
         file.seekg(offset);
@@ -162,18 +162,14 @@ void ParticionManager::WriteFiletoDirectoryEntry(string filepath) {
     WriteBitMap(particionName,bitMap);
 }
 
-void ParticionManager::CopyFile(char *filepath) {
-    WriteFiletoDirectoryEntry(string(filepath));
+void ParticionManager::Import(char *filePath) {
+    ImportFile(string(filePath));
 }
 
-void ParticionManager::Read() {
-//    Block  block= ReadBlock("prueba.bd",5*4096);
-    bitMap->GetNextFreeSpace();
-    bitMap->GetNextFreeSpace();
-    auto mierda=bitMap->GetNextFreeSpace();
-    cout<<mierda;
+void ParticionManager::Export(char *fileName, char *destinationPath) {
+    Block  block= ReadBlock("prueba.bd",4*4096);
+    cout<<"mierda";
 }
-
 
 
 

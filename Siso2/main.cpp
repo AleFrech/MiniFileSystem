@@ -49,7 +49,7 @@ int main() {
             char *name= strtok((buffer+offset)," ");
             char *size = strtok(NULL," ");
             currentParticion->CreateParticion(name,size);
-        }else if(strcmp((char *) "Load", command)) {
+        }else if(strcmp((char *) "Mount", command)) {
             currentParticion = currentParticion->LoadParticion(buffer+offset);
         }else if(strcmp((char *) "Unmount", command)) {
             currentParticion = NULL;
@@ -61,15 +61,17 @@ int main() {
             char *name= strtok((buffer+offset)," ");
             char *newName = strtok(NULL," ");
             currentParticion->RenameFile(name,newName);
-        }else if(strcmp((char *) "Copy", command)){
+        }else if(strcmp((char *) "Import", command)){
             char *filepath= strtok((buffer+offset)," ");
-            currentParticion->CopyFile(filepath);
+            currentParticion->Import(filepath);
         }else if(strcmp((char *) "DeleteFile", command)) {
             currentParticion->DeleteFile(buffer+offset);
         }else if(strcmp((char *) "Delete", command)) {
             currentParticion->Delete(buffer+offset);
-        }else if(strcmp((char *) "Read", command)) {
-            currentParticion->Read();
+        }else if(strcmp((char *) "Export", command)) {
+            char *name= strtok((buffer+offset)," ");
+            char *path = strtok(NULL," ");
+            currentParticion->Export(name,path);
         }else{
             cout<<"Command not found\n";
         }

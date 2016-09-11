@@ -9,13 +9,17 @@
 int BitMap::GetNextFreeSpace() {
     for(int i=0;i<Size;i++){
         if(Buffer[i]!=0) {
-            for(int n=7;n>=0;n--){
-                if(Buffer[i] & 1<<n){
-                    SetFreeToOcuppied(Buffer[i],n);
+            unsigned int auxBit=128;
+            for(int n=1;n<=8;n++){
                     // pos=(numero de bits por palabra) x (palabras con valor 0) + (posición del primer bit en 1).
-                    return (8*i)+n;
+                    int tmp=Buffer[i] & auxBit;
+                    if(tmp>0) {
+                        SetFreeToOcuppied(Buffer[i], n);
+                        return (8 * i) + n;
+                    }else {
+                        auxBit /= 2;
+                    }
                 }
-            }
         }
     }
     return -1;
