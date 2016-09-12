@@ -21,6 +21,7 @@ public:
     FileAttributes DirectoryEntries[127];
     void Add(FileAttributes entry);
     void RenameFile(char * name,char * newName);
+    FileAttributes GetFileEntry(char* name);
     void DeleteEntry(char * name);
     int occupied;
     void ListFiles();

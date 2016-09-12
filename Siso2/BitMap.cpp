@@ -2,7 +2,7 @@
 // Created by alejandrofrech on 08-22-16.
 //
 
-#include <cstring>
+#include <cmath>
 #include "BitMap.h"
 
 
@@ -10,16 +10,14 @@ int BitMap::GetNextFreeSpace() {
     for(int i=0;i<Size;i++){
         if(Buffer[i]!=0) {
             unsigned int auxBit=128;
-            for(int n=1;n<=8;n++){
-                    // pos=(numero de bits por palabra) x (palabras con valor 0) + (posición del primer bit en 1).
-                    int tmp=Buffer[i] & auxBit;
-                    if(tmp>0) {
-                        SetFreeToOcuppied(Buffer[i], n);
-                        return (8 * i) + n;
-                    }else {
-                        auxBit /= 2;
-                    }
-                }
+            for(int n=0;n<8;n++){
+                int tmp=Buffer[i] & auxBit;
+                if(tmp>0) {
+                    SetFreeToOcuppied(i, n);
+                    return ((8 * i) + n)+1;
+                }else
+                    auxBit /= 2;
+            }
         }
     }
     return -1;
@@ -39,17 +37,14 @@ void BitMap::InitMap(int size) {
 }
 
 unsigned char BitMap::SetOccupiedToFree(unsigned char value, int bitPos) {
-    int CharPositionInMap=GetCharPosition(value);
-    unsigned char tmpChar=Buffer[CharPositionInMap];
-    Buffer[CharPositionInMap]=(tmpChar |= 1 << bitPos);
-    return Buffer[CharPositionInMap];
+    int pos=GetCharPosition(value);
+    Buffer[pos]=(Buffer[pos] | (unsigned int)(128/pow(2,bitPos)));
+    return Buffer[pos];
 }
 
-unsigned char BitMap::SetFreeToOcuppied(unsigned char value, int bitPos){
-    int CharPositionInMap=GetCharPosition(value);
-    unsigned char tmpChar=Buffer[CharPositionInMap];
-    Buffer[CharPositionInMap]=(tmpChar &= ~(1<<bitPos));
-    return Buffer[CharPositionInMap];
+unsigned char BitMap::SetFreeToOcuppied(int pos, int bitPos){
+    Buffer[pos]=(Buffer[pos] &~((unsigned int)(128/pow(2,bitPos))));
+    return Buffer[pos];
 }
 
 int BitMap::GetCharPosition(unsigned char value) {
@@ -72,6 +67,6 @@ unsigned char BitMap::Get(int pos) {
 void BitMap::FreeBlock(int positionBlock) {
     auto tmpchar = Get(positionBlock/8);
     auto bitpos = positionBlock%8;
-    SetOccupiedToFree(tmpchar,bitpos);
+    SetOccupiedToFree(tmpchar,bitpos-1);
 }
 

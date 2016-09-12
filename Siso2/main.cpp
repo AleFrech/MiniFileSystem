@@ -70,8 +70,7 @@ int main() {
             currentParticion->Delete(buffer+offset);
         }else if(strcmp((char *) "Export", command)) {
             char *name= strtok((buffer+offset)," ");
-            char *path = strtok(NULL," ");
-            currentParticion->Export(name,path);
+            currentParticion->Export(name);
         }else{
             cout<<"Command not found\n";
         }

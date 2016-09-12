@@ -23,7 +23,7 @@ public:
     void InitMap(int size);
 private:
     unsigned char SetOccupiedToFree(unsigned char value,int bitPos);
-    unsigned char SetFreeToOcuppied(unsigned char value,int bitPos);
+    unsigned char SetFreeToOcuppied(int pos,int bitPos);
 
 };
 

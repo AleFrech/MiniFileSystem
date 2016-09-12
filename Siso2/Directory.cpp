@@ -20,7 +20,7 @@ void Directory::ListFiles() {
         cout<<" Size: ";
         cout<<DirectoryEntries[i].FileSize;
         cout<<" Date: ";
-        cout<< ctime(&DirectoryEntries[i].Date)<<endl;
+        cout<< ctime(&DirectoryEntries[i].Date);
     }
 }
 
@@ -44,6 +44,14 @@ void Directory::DeleteEntry(char *name) {
         }
     }
 
+}
+
+FileAttributes Directory::GetFileEntry(char * name) {
+    for(int i=0;i<occupied;i++){
+        if(strcmp(DirectoryEntries[i].FileName,name)==0){
+            return DirectoryEntries[i];
+        }
+    }
 }
 
 #pragma clang diagnostic pop

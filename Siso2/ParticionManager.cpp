@@ -36,7 +36,7 @@ ParticionManager* ParticionManager::LoadParticion(char * name) {
     tmpPartition->bitMap=new BitMap(ReadBitMap(tmpPartition->particionName));
         cout<<"Successfully Loaded BitMap\n";
     tmpPartition->directory= new Directory(ReadDirectory(tmpPartition->particionName));
-        cout<<"Successfully Loaded Directory\n";
+    cout<<"Successfully Loaded Directory\n";
     return tmpPartition;
 }
 
@@ -45,7 +45,7 @@ void ParticionManager::CreateEmptyFile(char * name) {
     strcpy(fileattr.FileName,string(name).c_str());
     fileattr.FileSize=0.0;
     fileattr.Date=time(0);
-    fileattr.FirstBlockPointer=0;
+    fileattr.FirstBlockPointer=-1;
     directory->Add(fileattr);
     WriteDirectory(particionName,directory);
 }
@@ -162,14 +162,40 @@ void ParticionManager::ImportFile(string filePath) {
     WriteBitMap(particionName,bitMap);
 }
 
+void ParticionManager::ExportFile(char* name) {
+    auto fileEntry=directory->GetFileEntry(name);
+    if(fileEntry.FirstBlockPointer==-1)
+        return;
+    int offset=0;
+    double size=fileEntry.FileSize;
+    ofstream file;
+    file.open(fileEntry.FileName,ios::binary |ios::out);
+    file.seekp(offset);
+    auto block=ReadBlock(particionName,fileEntry.FirstBlockPointer*4096);
+    while(size>4088){
+        file.write(block.Buffer, sizeof(block.Buffer));
+        offset+=4088;
+        size-=4088;
+        block=ReadBlock(particionName,block.nextBlock*4096);
+        file.seekp(offset);
+    }
+    if(size!=0){
+        file.write(block.Buffer,size);
+        offset+=size;
+    }
+    file.close();
+}
+
 void ParticionManager::Import(char *filePath) {
     ImportFile(string(filePath));
 }
 
-void ParticionManager::Export(char *fileName, char *destinationPath) {
-    Block  block= ReadBlock("prueba.bd",4*4096);
-    cout<<"mierda";
+void ParticionManager::Export(char *fileName) {
+    ExportFile(fileName);
 }
+
+
+
 
 
 
