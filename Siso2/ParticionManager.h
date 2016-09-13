@@ -43,6 +43,7 @@ private:
     void ExportFile(char * name,char * path);
 
 
+    void FreeBitMapEntryBlocks(FileAttributes name);
 };
 
 

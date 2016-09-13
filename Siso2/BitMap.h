@@ -7,6 +7,7 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <cmath>
 #include "Block.h"
 
 using namespace std;

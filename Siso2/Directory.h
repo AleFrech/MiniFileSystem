@@ -11,6 +11,7 @@
 #include <fstream>
 #include "FileAttributes.h"
 #include "Block.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -26,6 +27,8 @@ public:
     bool EntryExists(char * name);
     int occupied;
     void ListFiles();
+private:
+    void del(int index);
 };
 
 

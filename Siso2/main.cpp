@@ -1,84 +1,45 @@
 #include <iostream>
 #include <cstring>
+#include <tuple>
 #include "ParticionManager.h"
-
 using namespace std;
 
-int strcmp(char *str1,char*str2){
-    int i;
-    for(i=0; i <30; i++){
-        if(str1[i]!='\0' && str2[i]!='\0'){
-            if(str1[i] != str2[i]){
-                return 0;
-            }
-        }else{
-            if(str1[i]!=str2[i])
-                return 0;
-            return 1;
-        }
-    }
-}
-
-
-
-int splitBufferCommand(char* buffer,char * command){
-    int offset=0;
-    while(offset<30){
-        if(buffer[offset]==' ' || buffer[offset]=='\n'){
-            command[offset] = '\0';
-            offset++;
-            break;
-        }else{
-            command[offset]=buffer[offset];
-            offset++;
-        }
-    }
-    return offset;
+std::tuple<char*, char*,char*> GetBothParameters(char* buffer){
+    return  std::make_tuple(strtok(buffer," "),strtok(NULL," "),strtok(NULL," "));
 }
 
 int main() {
     ParticionManager *currentParticion = new ParticionManager();
     while (1) {
-
         char buffer[100];
         cout<<("cmd:>");
         cin.getline(buffer,sizeof(buffer));
-        char command[30];
-        int offset = splitBufferCommand(buffer,command);
-        if(strcmp((char *) "create_block", command)){
-            char *name= strtok((buffer+offset)," ");
-            char *size = strtok(NULL," ");
-            currentParticion->CreateParticion(name,size);
-        }else if(strcmp((char *) "mount", command)) {
-            auto x= currentParticion->LoadParticion(buffer+offset);
+        auto t=GetBothParameters(buffer);
+        char*command=get<0>(t);
+        if(strcmp(command,string("create_block").c_str())==0){
+            currentParticion->CreateParticion(get<1>(t),get<2>(t));
+        }else if(strcmp(command,string("mount").c_str())==0){
+            auto x= currentParticion->LoadParticion(get<1>(t));
             if(x!=NULL)
                 currentParticion=x;
-        }else if(strcmp((char *) "umount", command)) {
+        }else if(strcmp(command,string("umount").c_str())==0) {
             currentParticion = new ParticionManager();
-        }else if(strcmp((char *) "empty", command)) {
-            currentParticion->CreateEmptyFile(buffer+offset);
-        }else if(strcmp((char *) "ls", command)) {
+        }else if(strcmp(command,string("empty").c_str())==0) {
+            currentParticion->CreateEmptyFile(get<1>(t));
+        }else if(strcmp(command,string("ls").c_str())==0) {
             currentParticion->ListFiles();
-        }else if(strcmp((char *) "rename", command)){
-            char *name= strtok((buffer+offset)," ");
-            char *newName = strtok(NULL," ");
-            currentParticion->RenameFile(newName,name);
-        }else if(strcmp((char *) "copy_from_fs", command)){
-            char *path= strtok((buffer+offset)," ");
-            char *file = strtok(NULL," ");
-            currentParticion->Import(path,file);
-        }else if(strcmp((char *) "delete", command)) {
-            currentParticion->DeleteFile(buffer+offset);
-        }else if(strcmp((char *) "delete_block", command)) {
-            currentParticion->Delete(buffer+offset);
-        }else if(strcmp((char *) "copy_to_fs", command)) {
-            char *name= strtok((buffer+offset)," ");
-            char *path = strtok(NULL," ");
-            currentParticion->Export(name,path);
+        }else if(strcmp(command,string("rename").c_str())==0){
+            currentParticion->RenameFile(get<2>(t),get<1>(t));
+        }else if(strcmp(command,string("copy_from_fs").c_str())==0){
+            currentParticion->Import(get<1>(t),get<2>(t));
+        }else if(strcmp(command,string("delete").c_str())==0) {
+            currentParticion->DeleteFile(get<1>(t));
+        }else if(strcmp(command,string("delete_block").c_str())==0) {
+            currentParticion->Delete(get<1>(t));
+        }else if(strcmp(command,string("copy_to_fs").c_str())==0) {
+            currentParticion->Export(get<1>(t),get<2>(t));
         }else{
             cout<<"Command not found\n";
         }
     }
 }
-
-

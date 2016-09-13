@@ -39,8 +39,7 @@ void Directory::RenameFile(char *name, char *newName) {
 void Directory::DeleteEntry(char *name) {
     for(int i=0;i<occupied;i++){
         if(strcmp(DirectoryEntries[i].FileName,name)==0){
-            DirectoryEntries[i]=FileAttributes();
-            occupied--;
+           del(i);
         }
     }
 
@@ -62,5 +61,16 @@ bool Directory::EntryExists(char *name) {
     }
     return false;
 }
+
+
+void Directory::del(int index)
+{
+    int i;
+    occupied--;
+    for (i = index; i < occupied; i++) {
+        DirectoryEntries[i]=DirectoryEntries[i+1];
+    }
+}
+
 
 #pragma clang diagnostic pop

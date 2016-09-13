@@ -53,6 +53,10 @@ ParticionManager* ParticionManager::LoadParticion(char * name) {
 }
 
 void ParticionManager::CreateEmptyFile(char * name) {
+    if(particionName==""){
+        cout<<"Porfavor Montar Una Particion!!!"<<endl;
+        return;
+    }
     if(!directory->EntryExists(name)) {
         FileAttributes fileattr;
         strcpy(fileattr.FileName, string(name).c_str());
@@ -68,17 +72,12 @@ void ParticionManager::CreateEmptyFile(char * name) {
 }
 
 void ParticionManager::RenameFile(char *newName, char *name) {
+    if(particionName==""){
+        cout<<"Porfavor Montar Una Particion!!!"<<endl;
+        return;
+    }
     directory->RenameFile(name,newName);
     WriteDirectory(particionName,directory);
-}
-
-void ParticionManager::DeleteFile(char *name) {
-    if(directory->EntryExists(name)) {
-        directory->DeleteEntry(name);
-        WriteDirectory(particionName, directory);
-    }else{
-        cout<<"Archivo No Existe!!"<<endl;
-    }
 }
 
 
@@ -104,20 +103,17 @@ int ParticionManager::ReadSize(string name) {
     return size;
 }
 
-
 Directory ParticionManager::ReadDirectory(string name) {
     Directory directory;
     fileManager->Read(name,reinterpret_cast<char*>(&directory), sizeof(directory),4096*2);
     return directory;
 }
 
-
 BitMap ParticionManager::ReadBitMap(string name) {
     BitMap bitmap;
     fileManager->Read(name,reinterpret_cast<char*>(&bitmap), sizeof(BitMap),4096);
     return bitmap;
 }
-
 
 Block ParticionManager::ReadBlock(string name, int position) {
     Block block;
@@ -126,11 +122,43 @@ Block ParticionManager::ReadBlock(string name, int position) {
 }
 
 void ParticionManager::ListFiles() {
+    if(particionName==""){
+        cout<<"Porfavor Montar Una Particion!!!"<<endl;
+        return;
+    }
     directory->ListFiles();
 }
 
 void ParticionManager::Delete(char *name) {
     fileManager->DeleteFile(name);
+}
+
+void ParticionManager::DeleteFile(char *name) {
+    if(particionName==""){
+        cout<<"Porfavor Montar Una Particion!!!"<<endl;
+        return;
+    }
+
+    if(directory->EntryExists(name)) {
+        auto entry=directory->GetFileEntry(name);
+        if(entry.FirstBlockPointer!=-1)
+            FreeBitMapEntryBlocks(entry);
+        directory->DeleteEntry(name);
+        WriteDirectory(particionName, directory);
+        cout<<"Archivo Borrado Exitosamente!!"<<endl;
+    }else{
+        cout<<"Archivo No Existe!!"<<endl;
+    }
+}
+
+void ParticionManager::FreeBitMapEntryBlocks(FileAttributes entry) {
+    auto block=ReadBlock(particionName,entry.FirstBlockPointer*4096);
+    while(block.nextBlock!=-1){
+        bitMap->FreeBlock(block.positon);
+        block=ReadBlock(particionName,block.nextBlock*4096);
+    }
+    bitMap->FreeBlock(block.positon);
+    WriteBitMap(particionName,bitMap);
 }
 
 void ParticionManager::ImportFile(string filePath) {
@@ -210,13 +238,22 @@ void ParticionManager::ExportFile(char* name,char * path) {
 }
 
 void ParticionManager::Import(char * path,char *file) {
+    if(particionName==""){
+        cout<<"Porfavor Montar Una Particion!!!"<<endl;
+        return;
+    }
     string filepath=string(path)+"/"+string(file);
     ImportFile(filepath);
 }
 
 void ParticionManager::Export(char *fileName,char * path) {
+    if(particionName==""){
+        cout<<"Porfavor Montar Una Particion!!!"<<endl;
+        return;
+    }
     ExportFile(fileName,path);
 }
+
 
 
 

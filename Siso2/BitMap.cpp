@@ -65,8 +65,16 @@ unsigned char BitMap::Get(int pos) {
 }
 
 void BitMap::FreeBlock(int positionBlock) {
-    auto tmpchar = Get(positionBlock/8);
-    auto bitpos = positionBlock%8;
-    SetOccupiedToFree(tmpchar,bitpos-1);
+    auto x=positionBlock%8;
+    unsigned char tmpchar;
+    int bitpos;
+    if(x!=0) {
+        tmpchar = Get(positionBlock / 8);
+        bitpos = (positionBlock % 8)-1;
+    }else{
+        tmpchar=Get((positionBlock/8) -1);
+        bitpos = (positionBlock-1)%8;
+    }
+    SetOccupiedToFree(tmpchar,bitpos);
 }
 
