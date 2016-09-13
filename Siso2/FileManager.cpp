@@ -31,7 +31,13 @@ void FileManager::Write(string name,char *buffer, int size,int pos) {
 }
 
 void FileManager::DeleteFile(string name) {
-    remove(name.c_str());
+    ifstream f(name.c_str());
+    if(f.good()){
+        remove(name.c_str());
+        cout<<"Particion borrada exitosamente"<<endl;
+    }else{
+        cout<<"Particion No Existe"<<endl;
+    }
 }
 
 string FileManager::GetFileNameFromPath(string path) {

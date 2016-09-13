@@ -54,4 +54,13 @@ FileAttributes Directory::GetFileEntry(char * name) {
     }
 }
 
+bool Directory::EntryExists(char *name) {
+    for(int i=0;i<occupied;i++){
+        if(strcmp(DirectoryEntries[i].FileName,name)==0){
+            return true;
+        }
+    }
+    return false;
+}
+
 #pragma clang diagnostic pop

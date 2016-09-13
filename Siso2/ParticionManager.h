@@ -20,15 +20,15 @@ public:
     ParticionManager();
     string particionName;
     int ParticionSize;
-    void Export(char * fileName);
+    void Export(char * fileName,char * path);
     void CreateParticion(char* name,char* size);
-    void RenameFile(char* name,char * newName);
+    void RenameFile(char*newName,char *name);
     void DeleteFile(char * name);
     void Delete(char * name);
     ParticionManager* LoadParticion(char * name);
     void CreateEmptyFile(char* name);
     void ListFiles();
-    void Import(char *filePath);
+    void Import(char*path,char* file);
 
 private:
     Block  ReadBlock(string name, int position);
@@ -40,7 +40,7 @@ private:
     void WriteSize(string partitionName,int size);
     void WriteBitMap(string partitionName, BitMap *bitmap);
     void ImportFile(string filePath);
-    void ExportFile(char * name);
+    void ExportFile(char * name,char * path);
 
 
 };

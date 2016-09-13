@@ -23,6 +23,7 @@ public:
     void RenameFile(char * name,char * newName);
     FileAttributes GetFileEntry(char* name);
     void DeleteEntry(char * name);
+    bool EntryExists(char * name);
     int occupied;
     void ListFiles();
 };

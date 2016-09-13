@@ -10,6 +10,11 @@ ParticionManager::ParticionManager() {
 }
 
 void ParticionManager::CreateParticion(char * name,char* partitionSize) {
+    ifstream f(name);
+    if(f.good()){
+        cout<<"La Particion Ya Existe"<<endl;
+        return;
+    }
     particionName=string(name);
     int size=stoi(strtok(partitionSize," "));
     int ParticionSize=0;
@@ -29,35 +34,51 @@ void ParticionManager::CreateParticion(char * name,char* partitionSize) {
 
 
 ParticionManager* ParticionManager::LoadParticion(char * name) {
-    auto tmpPartition=new ParticionManager;
-    tmpPartition->particionName=string(name);
-    tmpPartition->ParticionSize=ReadSize(tmpPartition->particionName);
-    cout<<tmpPartition->ParticionSize<<endl;
-    tmpPartition->bitMap=new BitMap(ReadBitMap(tmpPartition->particionName));
+    ifstream f(name);
+    if(f.good()){
+        auto tmpPartition=new ParticionManager;
+        tmpPartition->particionName=string(name);
+        tmpPartition->ParticionSize=ReadSize(tmpPartition->particionName);
+        cout<<tmpPartition->ParticionSize<<endl;
+        tmpPartition->bitMap=new BitMap(ReadBitMap(tmpPartition->particionName));
         cout<<"Successfully Loaded BitMap\n";
-    tmpPartition->directory= new Directory(ReadDirectory(tmpPartition->particionName));
-    cout<<"Successfully Loaded Directory\n";
-    return tmpPartition;
+        tmpPartition->directory= new Directory(ReadDirectory(tmpPartition->particionName));
+        cout<<"Successfully Loaded Directory\n";
+        return tmpPartition;
+    }else{
+        cout<<"Particion No Existe"<<endl;
+        return NULL;
+    }
+
 }
 
 void ParticionManager::CreateEmptyFile(char * name) {
-    FileAttributes fileattr;
-    strcpy(fileattr.FileName,string(name).c_str());
-    fileattr.FileSize=0.0;
-    fileattr.Date=time(0);
-    fileattr.FirstBlockPointer=-1;
-    directory->Add(fileattr);
-    WriteDirectory(particionName,directory);
+    if(!directory->EntryExists(name)) {
+        FileAttributes fileattr;
+        strcpy(fileattr.FileName, string(name).c_str());
+        fileattr.FileSize = 0.0;
+        fileattr.Date = time(0);
+        fileattr.FirstBlockPointer = -1;
+        directory->Add(fileattr);
+        WriteDirectory(particionName, directory);
+    }else{
+        cout<<"El Archivo Ya Existe!!"<<endl;
+    }
+
 }
 
-void ParticionManager::RenameFile(char *name, char *newName) {
+void ParticionManager::RenameFile(char *newName, char *name) {
     directory->RenameFile(name,newName);
     WriteDirectory(particionName,directory);
 }
 
 void ParticionManager::DeleteFile(char *name) {
-    directory->DeleteEntry(name);
-    WriteDirectory(particionName,directory);
+    if(directory->EntryExists(name)) {
+        directory->DeleteEntry(name);
+        WriteDirectory(particionName, directory);
+    }else{
+        cout<<"Archivo No Existe!!"<<endl;
+    }
 }
 
 
@@ -162,14 +183,16 @@ void ParticionManager::ImportFile(string filePath) {
     WriteBitMap(particionName,bitMap);
 }
 
-void ParticionManager::ExportFile(char* name) {
+void ParticionManager::ExportFile(char* name,char * path) {
+
+
     auto fileEntry=directory->GetFileEntry(name);
     if(fileEntry.FirstBlockPointer==-1)
         return;
     int offset=0;
     double size=fileEntry.FileSize;
-    ofstream file;
-    file.open(fileEntry.FileName,ios::binary |ios::out);
+    string p=string(path)+"/"+string(fileEntry.FileName);
+    ofstream file(p.c_str(),ios::binary |ios::out);
     file.seekp(offset);
     auto block=ReadBlock(particionName,fileEntry.FirstBlockPointer*4096);
     while(size>4088){
@@ -186,12 +209,13 @@ void ParticionManager::ExportFile(char* name) {
     file.close();
 }
 
-void ParticionManager::Import(char *filePath) {
-    ImportFile(string(filePath));
+void ParticionManager::Import(char * path,char *file) {
+    string filepath=string(path)+"/"+string(file);
+    ImportFile(filepath);
 }
 
-void ParticionManager::Export(char *fileName) {
-    ExportFile(fileName);
+void ParticionManager::Export(char *fileName,char * path) {
+    ExportFile(fileName,path);
 }
 
 

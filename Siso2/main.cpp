@@ -45,32 +45,36 @@ int main() {
         cin.getline(buffer,sizeof(buffer));
         char command[30];
         int offset = splitBufferCommand(buffer,command);
-        if(strcmp((char *) "Create", command)){
+        if(strcmp((char *) "create_block", command)){
             char *name= strtok((buffer+offset)," ");
             char *size = strtok(NULL," ");
             currentParticion->CreateParticion(name,size);
-        }else if(strcmp((char *) "Mount", command)) {
-            currentParticion = currentParticion->LoadParticion(buffer+offset);
-        }else if(strcmp((char *) "Unmount", command)) {
-            currentParticion = NULL;
-        }else if(strcmp((char *) "CreateEmpty", command)) {
+        }else if(strcmp((char *) "mount", command)) {
+            auto x= currentParticion->LoadParticion(buffer+offset);
+            if(x!=NULL)
+                currentParticion=x;
+        }else if(strcmp((char *) "umount", command)) {
+            currentParticion = new ParticionManager();
+        }else if(strcmp((char *) "empty", command)) {
             currentParticion->CreateEmptyFile(buffer+offset);
         }else if(strcmp((char *) "ls", command)) {
             currentParticion->ListFiles();
-        }else if(strcmp((char *) "Rename", command)){
+        }else if(strcmp((char *) "rename", command)){
             char *name= strtok((buffer+offset)," ");
             char *newName = strtok(NULL," ");
-            currentParticion->RenameFile(name,newName);
-        }else if(strcmp((char *) "Import", command)){
-            char *filepath= strtok((buffer+offset)," ");
-            currentParticion->Import(filepath);
-        }else if(strcmp((char *) "DeleteFile", command)) {
+            currentParticion->RenameFile(newName,name);
+        }else if(strcmp((char *) "copy_from_fs", command)){
+            char *path= strtok((buffer+offset)," ");
+            char *file = strtok(NULL," ");
+            currentParticion->Import(path,file);
+        }else if(strcmp((char *) "delete", command)) {
             currentParticion->DeleteFile(buffer+offset);
-        }else if(strcmp((char *) "Delete", command)) {
+        }else if(strcmp((char *) "delete_block", command)) {
             currentParticion->Delete(buffer+offset);
-        }else if(strcmp((char *) "Export", command)) {
+        }else if(strcmp((char *) "copy_to_fs", command)) {
             char *name= strtok((buffer+offset)," ");
-            currentParticion->Export(name);
+            char *path = strtok(NULL," ");
+            currentParticion->Export(name,path);
         }else{
             cout<<"Command not found\n";
         }
