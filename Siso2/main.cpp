@@ -1,15 +1,18 @@
 #include <iostream>
 #include <cstring>
 #include <tuple>
-#include "ParticionManager.h"
+#include "PartitionManager.h"
 using namespace std;
 
 std::tuple<char*, char*,char*> GetBothParameters(char* buffer){
-    return  std::make_tuple(strtok(buffer," "),strtok(NULL," "),strtok(NULL," "));
+    char*p1=strtok(buffer," ");
+    char*p2=strtok(NULL," ");
+    char*p3=strtok(NULL," ");
+    return  std::make_tuple(p1,p2,p3);
 }
 
 int main() {
-    ParticionManager *currentParticion = new ParticionManager();
+    PartitionManager *partition = new PartitionManager();
     while (1) {
         char buffer[100];
         cout<<("cmd:>");
@@ -17,27 +20,27 @@ int main() {
         auto t=GetBothParameters(buffer);
         char*command=get<0>(t);
         if(strcmp(command,string("create_block").c_str())==0){
-            currentParticion->CreateParticion(get<1>(t),get<2>(t));
+            partition->CreatePartition(get<1>(t), get<2>(t));
         }else if(strcmp(command,string("mount").c_str())==0){
-            auto x= currentParticion->LoadParticion(get<1>(t));
+            auto x= partition->LoadPartition(get<1>(t));
             if(x!=NULL)
-                currentParticion=x;
+                partition=x;
         }else if(strcmp(command,string("umount").c_str())==0) {
-            currentParticion = new ParticionManager();
+            partition = new PartitionManager();
         }else if(strcmp(command,string("empty").c_str())==0) {
-            currentParticion->CreateEmptyFile(get<1>(t));
+            partition->CreateEmptyFile(get<1>(t));
         }else if(strcmp(command,string("ls").c_str())==0) {
-            currentParticion->ListFiles();
+            partition->ListFiles();
         }else if(strcmp(command,string("rename").c_str())==0){
-            currentParticion->RenameFile(get<2>(t),get<1>(t));
+            partition->RenameFile(get<2>(t),get<1>(t));
         }else if(strcmp(command,string("copy_from_fs").c_str())==0){
-            currentParticion->Import(get<1>(t),get<2>(t));
+            partition->Import(get<1>(t),get<2>(t));
         }else if(strcmp(command,string("delete").c_str())==0) {
-            currentParticion->DeleteFile(get<1>(t));
+            partition->DeleteFile(get<1>(t));
         }else if(strcmp(command,string("delete_block").c_str())==0) {
-            currentParticion->Delete(get<1>(t));
+            partition->Delete(get<1>(t));
         }else if(strcmp(command,string("copy_to_fs").c_str())==0) {
-            currentParticion->Export(get<1>(t),get<2>(t));
+            partition->Export(get<1>(t),get<2>(t));
         }else{
             cout<<"Command not found\n";
         }

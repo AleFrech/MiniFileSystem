@@ -16,7 +16,6 @@ public:
     int Size;
     unsigned char Buffer[4092];
     BitMap();
-
     unsigned char Get(int pos);
     int GetNextFreeSpace();
     void FreeBlock(int positionBlock);
@@ -24,7 +23,7 @@ public:
     void InitMap(int size);
 private:
     unsigned char SetOccupiedToFree(unsigned char value,int bitPos);
-    unsigned char SetFreeToOcuppied(int pos,int bitPos);
+    unsigned char SetFreeToOccupied(int pos, int bitPos);
 
 };
 

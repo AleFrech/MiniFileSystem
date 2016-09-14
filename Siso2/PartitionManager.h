@@ -11,21 +11,21 @@
 #include "FileManager.h"
 #include <string>
 
-class ParticionManager {
+class PartitionManager {
 private:
     BitMap *bitMap;
     Directory * directory;
     FileManager * fileManager;
 public:
-    ParticionManager();
-    string particionName;
-    int ParticionSize;
+    PartitionManager();
+    string PartitionName;
+    int PartitionSize;
     void Export(char * fileName,char * path);
-    void CreateParticion(char* name,char* size);
+    void CreatePartition(char *name, char *size);
     void RenameFile(char*newName,char *name);
     void DeleteFile(char * name);
     void Delete(char * name);
-    ParticionManager* LoadParticion(char * name);
+    PartitionManager* LoadPartition(char *name);
     void CreateEmptyFile(char* name);
     void ListFiles();
     void Import(char*path,char* file);

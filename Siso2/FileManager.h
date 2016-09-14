@@ -16,6 +16,4 @@ public:
     string GetFileNameFromPath(string path);
     int GetFileSize(string name);
 };
-
-
 #endif //SISO2_FILEMANAGER_H

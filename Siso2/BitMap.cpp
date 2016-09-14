@@ -13,7 +13,7 @@ int BitMap::GetNextFreeSpace() {
             for(int n=0;n<8;n++){
                 int tmp=Buffer[i] & auxBit;
                 if(tmp>0) {
-                    SetFreeToOcuppied(i, n);
+                    SetFreeToOccupied(i, n);
                     return ((8 * i) + n)+1;
                 }else
                     auxBit /= 2;
@@ -27,7 +27,6 @@ void BitMap::InitMap(int size) {
     Size=(size/1024/4)/8;
     if(Size>4092)
         Size=4092;
-
     for(int i=0;i<Size;i++) {
         if (i == 0)
             Buffer[i] = 31;
@@ -38,12 +37,12 @@ void BitMap::InitMap(int size) {
 
 unsigned char BitMap::SetOccupiedToFree(unsigned char value, int bitPos) {
     int pos=GetCharPosition(value);
-    Buffer[pos]=(Buffer[pos] | (unsigned int)(128/pow(2,bitPos)));
+    Buffer[pos]= (unsigned char) (Buffer[pos] | (unsigned int)(128 / pow(2, bitPos)));
     return Buffer[pos];
 }
 
-unsigned char BitMap::SetFreeToOcuppied(int pos, int bitPos){
-    Buffer[pos]=(Buffer[pos] &~((unsigned int)(128/pow(2,bitPos))));
+unsigned char BitMap::SetFreeToOccupied(int pos, int bitPos){
+    Buffer[pos]= (unsigned char) (Buffer[pos] & ~((unsigned int)(128 / pow(2, bitPos))));
     return Buffer[pos];
 }
 

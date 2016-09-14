@@ -9,7 +9,7 @@
 class Block {
 public:
     char Buffer[4088];
-    int positon;
+    int Position;
     int  nextBlock;
 };
 
