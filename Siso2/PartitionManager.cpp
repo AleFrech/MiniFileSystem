@@ -10,6 +10,11 @@ PartitionManager::PartitionManager() {
 }
 
 void PartitionManager::CreatePartition(char *name, char *partitionSize) {
+    if(name ==NULL || partitionSize==NULL){
+        cout<<"Uno o Mas Parametros No Enivados"<<endl;
+        return;
+    }
+
     ifstream f(name);
     if(f.good()){
         cout<<"La Particion Ya Existe"<<endl;
@@ -34,6 +39,11 @@ void PartitionManager::CreatePartition(char *name, char *partitionSize) {
 
 
 PartitionManager* PartitionManager::LoadPartition(char *name) {
+    if(name ==NULL){
+        cout<<"Uno o Mas Parametros No Enivados"<<endl;
+        return NULL;
+    }
+
     ifstream f(name);
     if(f.good()){
         auto tmpPartition=new PartitionManager;
@@ -53,6 +63,10 @@ PartitionManager* PartitionManager::LoadPartition(char *name) {
 }
 
 void PartitionManager::CreateEmptyFile(char * name) {
+    if(name ==NULL){
+        cout<<"Uno o Mas Parametros No Enivados"<<endl;
+        return;
+    }
     if(PartitionName==""){
         cout<<"Porfavor Montar Una Particion!!!"<<endl;
         return;
@@ -72,6 +86,11 @@ void PartitionManager::CreateEmptyFile(char * name) {
 }
 
 void PartitionManager::RenameFile(char *newName, char *name) {
+    if(name ==NULL || newName==NULL){
+        cout<<"Uno o Mas Parametros No Enivados"<<endl;
+        return;
+    }
+
     if(PartitionName==""){
         cout<<"Porfavor Montar Una Particion!!!"<<endl;
         return;
@@ -130,10 +149,19 @@ void PartitionManager::ListFiles() {
 }
 
 void PartitionManager::Delete(char *name) {
+    if(name ==NULL){
+        cout<<"Uno o Mas Parametros No Enivados"<<endl;
+        return;
+    }
     fileManager->DeleteFile(name);
 }
 
 void PartitionManager::DeleteFile(char *name) {
+    if(name ==NULL){
+        cout<<"Uno o Mas Parametros No Enivados"<<endl;
+        return;
+    }
+
     if(PartitionName==""){
         cout<<"Porfavor Montar Una Particion!!!"<<endl;
         return;
@@ -238,6 +266,12 @@ void PartitionManager::ExportFile(char* name,char * path) {
 }
 
 void PartitionManager::Import(char * path,char *file) {
+
+    if(path ==NULL || file==NULL){
+        cout<<"Uno o Mas Parametros No Enivados"<<endl;
+        return;
+    }
+
     if(PartitionName==""){
         cout<<"Porfavor Montar Una Particion!!!"<<endl;
         return;
@@ -247,6 +281,11 @@ void PartitionManager::Import(char * path,char *file) {
 }
 
 void PartitionManager::Export(char *fileName,char * path) {
+    if(path ==NULL || fileName==NULL){
+        cout<<"Uno o Mas Parametros No Enivados"<<endl;
+        return;
+    }
+
     if(PartitionName==""){
         cout<<"Porfavor Montar Una Particion!!!"<<endl;
         return;
